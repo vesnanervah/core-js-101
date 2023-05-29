@@ -241,8 +241,8 @@ function toCsvText(arr) {
  *   [ 0, 1, 2, 3, 4, 5 ] => [ 0, 1, 4, 9, 16, 25 ]
  *   [ 10, 100, -1 ]      => [ 100, 10000, 1 ]
  */
-function toArrayOfSquares(/* arr */) {
-  throw new Error('Not implemented');
+function toArrayOfSquares(arr) {
+  return arr.map((item) => item ** 2);
 }
 
 
@@ -260,8 +260,11 @@ function toArrayOfSquares(/* arr */) {
  *   [ 0, 0, 0, 0, 0]         => [ 0, 0, 0, 0, 0]
  *   [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] => [ 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 ]
  */
-function getMovingSum(/* arr */) {
-  throw new Error('Not implemented');
+function getMovingSum(arr) {
+  return arr.map((item, index) => {
+    const subArr = arr.slice(0, index);
+    return subArr.reduce((finalNum, num) => num + finalNum, 0) + item;
+  });
 }
 
 /**
@@ -275,8 +278,13 @@ function getMovingSum(/* arr */) {
  * [ 'a', 'b', 'c' , null ]  => [ "b", null ]
  * [ "a" ] => []
  */
-function getSecondItems(/* arr */) {
-  throw new Error('Not implemented');
+function getSecondItems(arr) {
+  return arr.reduce((acc, item, index) => {
+    if (index % 2 !== 0) {
+      acc.push(item);
+    }
+    return acc;
+  }, []);
 }
 
 
@@ -294,8 +302,19 @@ function getSecondItems(/* arr */) {
  *  [ 'a', 'b', 'c', null ] => [ 'a', 'b','b', 'c','c','c',  null,null,null,null ]
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
+function propagateItemsByPositionIndex(arr) {
+  function multiplyItem(mArr, item, length) {
+    if (mArr.length < length) {
+      mArr.push(item);
+      multiplyItem(mArr, item, length);
+    }
+  }
+  return arr.reduce((acc, item, index) => {
+    const newArr = [item];
+    multiplyItem(newArr, item, index + 1);
+    acc.push(...newArr);
+    return acc;
+  }, []);
 }
 
 
@@ -312,7 +331,7 @@ function propagateItemsByPositionIndex(/* arr */) {
  *   [ 1,2,3,4,5,6,7,8,9,10 ] => [ 10, 9, 8 ]
  *   [ 10, 10, 10, 10 ] => [ 10, 10, 10 ]
  */
-function get3TopItems(/* arr */) {
+function get3TopItems(/*  arr */) {
   throw new Error('Not implemented');
 }
 
@@ -347,10 +366,14 @@ function getPositivesCount(arr) {
  *   [ 'nine','eight','nine','eight'] => [ 'eight','eight','nine','nine']
  *   [ 'one','one','one','zero' ]     => [ 'zero','one','one','one' ]
  */
-function sortDigitNamesByNumericOrder(/* arr */) {
-  throw new Error('Not implemented');
+function sortDigitNamesByNumericOrder(arr) {
+  const numsArr = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+  return arr.sort((a, b) => {
+    const aIndex = numsArr.indexOf(a);
+    const bIndex = numsArr.indexOf(b);
+    return aIndex - bIndex;
+  });
 }
-
 /**
  * Returns the sum of all items in the specified array of numbers
  *
@@ -418,8 +441,8 @@ function findAllOccurrences(arr, item) {
  *    [1, 2, 3, 4, 5]                   => '1,2,3,4,5'
  *    ['rock', 'paper', 'scissors']     => 'rock,paper,scissors'
  */
-function toStringList(/* arr */) {
-  throw new Error('Not implemented');
+function toStringList(arr) {
+  return arr.join(',');
 }
 
 
@@ -471,8 +494,19 @@ function sortCitiesArray(/* arr */) {
  *           [0,0,0,1,0],
  *           [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  const res = [[]];
+  function appendMatrix(smallIndex = 0, bigIndex = 0) {
+    if (res[bigIndex].length < n) {
+      res[bigIndex].push(smallIndex === bigIndex ? 1 : 0);
+      appendMatrix(smallIndex + 1, bigIndex);
+    } else if (res[bigIndex].length >= n && res.length < n) {
+      res.push([]);
+      appendMatrix(0, bigIndex + 1);
+    }
+  }
+  appendMatrix();
+  return res;
 }
 
 /**
@@ -595,10 +629,13 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  if (arr.length % 2 === 0) {
+    return [...arr.slice(arr.length / 2), ...arr.slice(0, arr.length / 2)];
+  }
+  return [...arr.slice((arr.length + 1) / 2),
+    arr[(arr.length - 1) / 2], ...arr.slice(0, (arr.length - 1) / 2)];
 }
-
 
 module.exports = {
   findElement,
