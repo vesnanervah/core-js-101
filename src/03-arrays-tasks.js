@@ -606,8 +606,13 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  function innerRec(item, i) {
+    const index = indexes[i];
+    const innerItem = item[index];
+    return i < indexes.length - 1 ? innerRec(innerItem, i + 1) : innerItem;
+  }
+  return innerRec(arr, 0);
 }
 
 
