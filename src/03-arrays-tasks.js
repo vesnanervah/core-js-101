@@ -589,8 +589,26 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], (x) => x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  const answ = [];
+  function innerRec(item, index) {
+    if (index === item.length) {
+      return;
+    }
+    let innerItem = item[index];
+    if (Array.isArray(innerItem)) {
+      innerItem = childrenSelector(innerItem);
+      innerRec(innerItem, 0);
+    } else if (typeof innerItem === 'string') {
+      innerItem = childrenSelector(innerItem);
+      answ.push(...innerItem);
+    } else {
+      answ.push(innerItem);
+    }
+    innerRec(item, index + 1);
+  }
+  innerRec(arr, 0);
+  return answ;
 }
 
 
