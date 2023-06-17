@@ -36,8 +36,24 @@ function Rectangle(width, height) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  let res;
+  if (typeof obj === 'object' && !Array.isArray(obj)) {
+    res = '{';
+    Object.keys(obj).forEach((prop, index, arr) => {
+      if (index === arr.length - 1) {
+        res += `"${prop}":${obj[prop]}`;
+      } else {
+        res += `"${prop}":${obj[prop]},`;
+      }
+    });
+    res += '}';
+  } else if (Array.isArray(obj)) {
+    res = `[${obj}]`;
+  } else {
+    res = `${obj}`;
+  }
+  return res;
 }
 
 
